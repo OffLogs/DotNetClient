@@ -1,13 +1,14 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using OffLogs.Client.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OffLogs.Client
+namespace OffLogs.Client.Dto
 {
-    internal class LogDto
+    public class LogDto
     {
         [JsonProperty]
         public string Level { get; set; }
@@ -24,11 +25,14 @@ namespace OffLogs.Client
         [JsonProperty]
         public Dictionary<string, string> Properties { get; } = new Dictionary<string, string>();
 
-        public LogDto(OfflogsLogLevel level, string message, DateTime? timestamp = null)
+        public LogDto(LogLevel level, string message, DateTime? timestamp = null)
         {
-            Level = level.GetValue();
+            Level = OfflogsLogLevel.GetFromLogLevel(level).GetValue();
             Message = message;
             Timestamp = timestamp ?? DateTime.Now;
+
+            if (string.IsNullOrEmpty(Message))
+                throw new ArgumentNullException(nameof(message));
         }
 
         public void AddProperty(string key, string value)
