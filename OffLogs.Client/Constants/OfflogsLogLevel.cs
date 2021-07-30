@@ -5,20 +5,20 @@ using System.Text;
 
 namespace OffLogs.Client.Constants
 {
-    internal class OfflogsLogLevel
+    public class OffLogsLogLevel
     {
-        public static readonly OfflogsLogLevel Error = new OfflogsLogLevel("E", "Error");
-        public static readonly OfflogsLogLevel Warning = new OfflogsLogLevel("W", "Warning");
-        public static readonly OfflogsLogLevel Fatal = new OfflogsLogLevel("F", "Fatal");
-        public static readonly OfflogsLogLevel Information = new OfflogsLogLevel("I", "Information");
-        public static readonly OfflogsLogLevel Debug = new OfflogsLogLevel("D", "Debug");
+        public static readonly OffLogsLogLevel Error = new OffLogsLogLevel("E", "Error");
+        public static readonly OffLogsLogLevel Warning = new OffLogsLogLevel("W", "Warning");
+        public static readonly OffLogsLogLevel Fatal = new OffLogsLogLevel("F", "Fatal");
+        public static readonly OffLogsLogLevel Information = new OffLogsLogLevel("I", "Information");
+        public static readonly OffLogsLogLevel Debug = new OffLogsLogLevel("D", "Debug");
 
         protected readonly string _Name;
         protected readonly string _Value;
 
-        public OfflogsLogLevel() { }
+        public OffLogsLogLevel() { }
 
-        private OfflogsLogLevel(string value, string name) { }
+        private OffLogsLogLevel(string value, string name) { }
 
         public override string ToString()
         {
@@ -30,7 +30,7 @@ namespace OffLogs.Client.Constants
             return _Value;
         }
 
-        public static OfflogsLogLevel GetFromLogLevel(LogLevel level)
+        public static OffLogsLogLevel GetFromLogLevel(LogLevel level)
         {
             if (level == LogLevel.Debug || level == LogLevel.Trace)
                 return Debug;
@@ -38,7 +38,7 @@ namespace OffLogs.Client.Constants
                 return Warning;
             if (level == LogLevel.Information)
                 return Information;
-            return null;
+            return Debug;
         }
     }
 }

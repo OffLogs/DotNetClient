@@ -10,14 +10,16 @@ namespace OffLogs.Client.Dto
 {
     public class LogDto
     {
-        [JsonProperty]
-        public string Level { get; set; }
+        private const int _propertiesMaxCount = 99;
 
         [JsonProperty]
-        public DateTime Timestamp { get; set; }
+        public string Level { get; }
 
         [JsonProperty]
-        public string Message { get; set; }
+        public DateTime Timestamp { get; }
+
+        [JsonProperty]
+        public string Message { get; }
 
         [JsonProperty]
         public List<string> Traces { get; } = new List<string>();
@@ -27,17 +29,20 @@ namespace OffLogs.Client.Dto
 
         public LogDto(LogLevel level, string message, DateTime? timestamp = null)
         {
-            Level = OfflogsLogLevel.GetFromLogLevel(level).GetValue();
+            if (string.IsNullOrEmpty(message))
+                throw new ArgumentNullException(nameof(message));
+
+            Level = OffLogsLogLevel.GetFromLogLevel(level).GetValue();
             Message = message;
             Timestamp = timestamp ?? DateTime.Now;
-
-            if (string.IsNullOrEmpty(Message))
-                throw new ArgumentNullException(nameof(message));
         }
 
         public void AddProperty(string key, string value)
         {
             Properties.Add(key, value);
+
+            if (Properties.Count >= _propertiesMaxCount)
+                throw new Exception($"Too many traces. Max: {_propertiesMaxCount}");
         }
 
         public void AddProperties(IDictionary<string, string> properties)
@@ -49,6 +54,9 @@ namespace OffLogs.Client.Dto
         public void AddTrace(string trace)
         {
             Traces.Add(trace);
+
+            if (Traces.Count >= _propertiesMaxCount)
+                throw new Exception($"Too many traces. Max: {_propertiesMaxCount}");
         }
 
         public void AddTraces(ICollection<string> traces)
