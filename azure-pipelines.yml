@@ -40,6 +40,6 @@ steps:
     displayName: "Publish Test Results"
     inputs:
       testResultsFormat: xUnit
-      testResultsFiles: "**Offlogs.Client.Tests/*.xml"
+      testResultsFiles: "**/*.xml"
       mergeTestResults: true
       failTaskOnFailedTests: true
