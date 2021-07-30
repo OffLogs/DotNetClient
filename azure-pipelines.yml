@@ -37,7 +37,7 @@ steps:
   - task: PublishTestResults@2
     displayName: "Publish Test Results"
     inputs:
-      testResultsFormat: xUnit
-      testResultsFiles: "**/*.xml"
+      testResultsFormat: VSTest
+      testResultsFiles: '**/*.trx'
       mergeTestResults: true
       failTaskOnFailedTests: true
