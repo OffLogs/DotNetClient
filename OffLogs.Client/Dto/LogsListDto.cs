@@ -7,7 +7,7 @@ using System.Text;
 
 namespace OffLogs.Client.Dto
 {
-    internal class LogsListDto
+    public class LogsListDto
     {
         [JsonProperty("logs")]
         public List<LogDto> Logs { get; }
