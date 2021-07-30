@@ -102,5 +102,45 @@ namespace Offlogs.Client.Tests.Dto
                 dto.AddProperties(properties);
             });
         }
+
+        [Fact]
+        public void ShouldRemovePropertyIfKeyIsEmpty()
+        {
+            var properties = new Dictionary<string, string>();
+            properties.Add("", "1");
+            properties.Add("2", "3");
+            var dto = new LogDto(LogLevel.Error, "message");
+            dto.AddProperties(properties);
+
+            Assert.True(dto.Properties.Count == 1);
+        }
+
+        [Fact]
+        public void ShouldRemovePropertyIfValueIsNullOrEmpty()
+        {
+            var properties = new Dictionary<string, string>();
+            properties.Add("1", "");
+            properties.Add("2", "3");
+            properties.Add("4", null);
+            var dto = new LogDto(LogLevel.Error, "message");
+            dto.AddProperties(properties);
+
+            Assert.True(dto.Traces.Count == 0);
+            Assert.True(dto.Properties.Count == 1);
+        }
+
+        [Fact]
+        public void ShouldRemoveTraceIsNull()
+        {
+            var traces = new List<string>();
+            traces.Add("1");
+            traces.Add(null);
+            traces.Add("");
+            var dto = new LogDto(LogLevel.Error, "message");
+            dto.AddTraces(traces);
+
+            Assert.True(dto.Properties.Count == 0);
+            Assert.True(dto.Traces.Count == 1);
+        }
     }
 }

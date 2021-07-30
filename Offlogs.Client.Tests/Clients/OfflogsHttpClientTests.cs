@@ -18,6 +18,7 @@ namespace Offlogs.Client.Tests.Clients
             Client = new OfflogsHttpClient(ApiToken);
         }
 
+        #region Without errors
         [Theory]
         [InlineData(LogLevel.Error)]
         [InlineData(LogLevel.Debug)]
@@ -25,9 +26,51 @@ namespace Offlogs.Client.Tests.Clients
         [InlineData(LogLevel.Trace)]
         [InlineData(LogLevel.Warning)]
         [InlineData(LogLevel.None)]
-        public async Task ShouldSendSimpleLog(LogLevel logLevel)
+        public async Task ShouldSendSimpleLogAsync(LogLevel logLevel)
         {
             await Client.SendLogAsync(logLevel, "Some Debug message");
         }
+
+        [Theory]
+        [InlineData(LogLevel.Error)]
+        [InlineData(LogLevel.Debug)]
+        [InlineData(LogLevel.Information)]
+        [InlineData(LogLevel.Trace)]
+        [InlineData(LogLevel.Warning)]
+        [InlineData(LogLevel.None)]
+        public async Task ShouldSendLogWithPropertiesAsync(LogLevel logLevel)
+        {
+            var properties = new Dictionary<string, string>();
+            properties.Add("1", "2");
+            properties.Add("3", "4");
+            await Client.SendLogAsync(logLevel, "Some Debug message", null, properties);
+        }
+
+        [Theory]
+        [InlineData(LogLevel.Error)]
+        [InlineData(LogLevel.Debug)]
+        [InlineData(LogLevel.Information)]
+        [InlineData(LogLevel.Trace)]
+        [InlineData(LogLevel.Warning)]
+        [InlineData(LogLevel.None)]
+        public async Task ShouldSendLogWithTracesAsync(LogLevel logLevel)
+        {
+            var traces = new List<string>();
+            traces.Add("trace 1");
+            traces.Add("trace 2");
+            traces.Add("trace 3");
+            await Client.SendLogAsync(logLevel, "Some Debug message", traces);
+        }
+        #endregion
+
+        #region With errors
+        [Fact]
+        public async Task ShouldThowErrorIfMessageIsEmpty()
+        {
+            await Assert.ThrowsAsync<ArgumentNullException>(async () => {
+                await Client.SendLogAsync(LogLevel.Debug, "");
+            });
+        }
+        #endregion
     }
 }

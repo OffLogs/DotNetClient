@@ -53,7 +53,7 @@ namespace OffLogs.Client
             IDictionary<string, string> properties = null
         )
         {
-            if (message == null)
+            if (string.IsNullOrEmpty(message))
                 throw new ArgumentNullException(nameof(message));
 
             var logDto = new LogDto(level, message);
