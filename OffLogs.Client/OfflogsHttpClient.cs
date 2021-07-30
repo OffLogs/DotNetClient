@@ -12,7 +12,7 @@ namespace OffLogs.Client
 {
     public class OfflogsHttpClient: IDisposable
     {
-        private readonly string _apiUrl = "";
+        private readonly string _apiUrl = "https://api.offlogs.com/log/add";
 
         private static readonly HttpClient _client = new HttpClient();
         private readonly string _apiToken;

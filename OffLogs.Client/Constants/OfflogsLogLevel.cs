@@ -18,7 +18,11 @@ namespace OffLogs.Client.Constants
 
         public OffLogsLogLevel() { }
 
-        private OffLogsLogLevel(string value, string name) { }
+        private OffLogsLogLevel(string value, string name) 
+        {
+            _Value = value;
+            _Name = name;
+        }
 
         public override string ToString()
         {

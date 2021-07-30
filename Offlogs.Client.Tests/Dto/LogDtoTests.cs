@@ -32,6 +32,21 @@ namespace Offlogs.Client.Tests.Dto
             Assert.Equal(expectedTraces, dto.Traces);
         }
 
+        #region Correct LogLevel
+        [Theory]
+        [InlineData(LogLevel.Error)]
+        [InlineData(LogLevel.Debug)]
+        [InlineData(LogLevel.Information)]
+        [InlineData(LogLevel.Trace)]
+        [InlineData(LogLevel.Warning)]
+        [InlineData(LogLevel.None)]
+        public void LogLevelShoulBeCorrect(LogLevel logLevel)
+        {
+            var dto = new LogDto(logLevel, "Some message");
+            Assert.NotEmpty(dto.Level);
+        }
+        #endregion
+
         [Fact]
         public void ShouldAddTimestampIfItNull()
         {

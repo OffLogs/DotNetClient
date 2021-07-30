@@ -18,35 +18,16 @@ namespace Offlogs.Client.Tests.Clients
             Client = new OfflogsHttpClient(ApiToken);
         }
 
-        [Fact]
-        public async Task ShouldSendSimpleDebugLog()
+        [Theory]
+        [InlineData(LogLevel.Error)]
+        [InlineData(LogLevel.Debug)]
+        [InlineData(LogLevel.Information)]
+        [InlineData(LogLevel.Trace)]
+        [InlineData(LogLevel.Warning)]
+        [InlineData(LogLevel.None)]
+        public async Task ShouldSendSimpleLog(LogLevel logLevel)
         {
-            await Client.SendLogAsync(LogLevel.Debug, "Some Debug message");
-        }
-
-        public async Task ShouldSendSimpleErrorLog()
-        {
-            await Client.SendLogAsync(LogLevel.Error, "Some Error message");
-        }
-
-        public async Task ShouldSendSimpleTraceLog()
-        {
-            await Client.SendLogAsync(LogLevel.Trace, "Some Trace message");
-        }
-
-        public async Task ShouldSendSimpleCriticalLog()
-        {
-            await Client.SendLogAsync(LogLevel.Critical, "Some Critical message");
-        }
-
-        public async Task ShouldSendSimpleWarningLog()
-        {
-            await Client.SendLogAsync(LogLevel.Warning, "Some Warning message");
-        }
-
-        public async Task ShouldSendSimpleInformationLog()
-        {
-            await Client.SendLogAsync(LogLevel.Information, "Some Information message");
+            await Client.SendLogAsync(logLevel, "Some Debug message");
         }
     }
 }
