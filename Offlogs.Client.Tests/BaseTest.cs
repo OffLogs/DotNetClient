@@ -21,6 +21,7 @@ namespace Offlogs.Client.Tests
         {
             Configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
+                .AddJsonFile("appsettings.Local.json")
                 .AddEnvironmentVariables()
                 .Build();
         }
