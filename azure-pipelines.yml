@@ -32,12 +32,12 @@ steps:
     inputs:
       command: test
       projects: '**Offlogs.Client.Tests/*.csproj'
-      arguments: '--logger --configuration $(buildConfiguration)'
+      arguments: '--configuration $(buildConfiguration) --logger trx --results-directory /opt/vsts/work/_temp/'
 
   - task: PublishTestResults@2
     displayName: "Publish Test Results"
     inputs:
       testResultsFormat: VSTest
-      testResultsFiles: '**/*.trx'
+      testResultsFiles: "/opt/vsts/work/_temp/*.trx"
       mergeTestResults: true
       failTaskOnFailedTests: true
