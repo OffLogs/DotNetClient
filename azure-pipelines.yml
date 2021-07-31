@@ -7,13 +7,14 @@ trigger:
   - master
   - dev
 
+
 pool:
   vmImage: 'ubuntu-latest'
-
 
 variables:
   buildConfiguration: 'Testing'
   Environment: 'Testing'
+  OffLogs__TestApiToken: $(APITOKEN)
   
 steps: 
   - task: UseDotNet@2
@@ -22,25 +23,21 @@ steps:
       packageType: 'sdk'
       version: '5.0.x'
   
-  - task: PublishTestResults@2
-    displayName: "Publish Test Results"
-    inputs:
-      testResultsFormat: VSTest
-      testResultsFiles: "/opt/vsts/work/_temp/*.trx"
-      mergeTestResults: true
-      failTaskOnFailedTests: true
+  - script: |
+      echo "{}" > Offlogs.Client.Tests/appsettings.Local.json
+    displayName: 'Create empty config file'
 
   - task: DotNetCoreCLI@2
     displayName: Unit Tests
     inputs:
       command: test
       projects: '**Offlogs.Client.Tests/*.csproj'
-      arguments: '--logger --configuration $(buildConfiguration) --verbosity=normal'
+      arguments: '--configuration $(buildConfiguration)'
 
   - task: PublishTestResults@2
     displayName: "Publish Test Results"
     inputs:
       testResultsFormat: xUnit
-      testResultsFiles: "**/*.xml"
+      testResultsFiles: '/home/vsts/work/_temp/*.trx' 
       mergeTestResults: true
       failTaskOnFailedTests: true

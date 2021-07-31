@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using OffLogs.Client.Constants;
 using OffLogs.Client.Dto;
 using System;
 using System.Collections.Generic;
@@ -10,16 +9,18 @@ using System.Threading.Tasks;
 
 namespace OffLogs.Client
 {
-    public class OfflogsHttpClient: IDisposable
+    public class OfflogsHttpClient: IOfflogsHttpClient
     {
-        private readonly string _apiUrl = "";
+        private readonly string _apiUrl = "https://api.offlogs.com/log/add";
 
-        private static readonly HttpClient _client = new HttpClient();
+        private readonly HttpClient _client;
         private readonly string _apiToken;
 
         public OfflogsHttpClient(string apiToken)
         {
             _apiToken = apiToken;
+            _client = new HttpClient();
+            _client.Timeout = TimeSpan.FromSeconds(3);
         }
 
         public void Dispose()
@@ -36,16 +37,6 @@ namespace OffLogs.Client
             await SendLogAsync(level, message, null, properties);
         }
 
-        /// <summary>
-        /// Send a log immediately as an asynchronous operation.
-        /// </summary>
-        /// <param name="level">Log level</param>
-        /// <param name="message">Log message</param>
-        /// <param name="traces">List of the traces</param>
-        /// <param name="properties">List of the properties</param>
-        /// Exceptions:
-        ///  T:System.Net.Http.HttpRequestException:
-        ///    The HTTP response is unsuccessful.
         public async Task SendLogAsync(
             LogLevel level,
             string message,
@@ -53,7 +44,7 @@ namespace OffLogs.Client
             IDictionary<string, string> properties = null
         )
         {
-            if (message == null)
+            if (string.IsNullOrEmpty(message))
                 throw new ArgumentNullException(nameof(message));
 
             var logDto = new LogDto(level, message);
@@ -64,16 +55,6 @@ namespace OffLogs.Client
             await SendLogsAsync(new List<LogDto>() { logDto });
         }
 
-        /// <summary>
-        /// Send a logs list immediately as an asynchronous operation.
-        /// </summary>
-        /// <param name="level">Log level</param>
-        /// <param name="message">Log message</param>
-        /// <param name="traces">List of the traces</param>
-        /// <param name="properties">List of the properties</param>
-        /// Exceptions:
-        ///  T:System.Net.Http.HttpRequestException:
-        ///    The HTTP response is unsuccessful.
         public async Task SendLogsAsync(
             ICollection<LogDto> logs
         )
