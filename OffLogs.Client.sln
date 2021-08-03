@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OffLogs.Client", "OffLogs.Client\OffLogs.Client.csproj", "{D608D790-DDB7-4347-9F94-EC839E167359}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Offlogs.Client.Tests", "Offlogs.Client.Tests\Offlogs.Client.Tests.csproj", "{4481FB10-6906-47E0-9438-71BD8436A859}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Offlogs.Client.Tests", "Offlogs.Client.Tests\Offlogs.Client.Tests.csproj", "{4481FB10-6906-47E0-9438-71BD8436A859}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OffLogs.Client.AspNetCore", "OffLogs.Client.AspNetCore\OffLogs.Client.AspNetCore.csproj", "{2E9F0C39-C7E1-4882-B7B1-5F133BEF2F82}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{4481FB10-6906-47E0-9438-71BD8436A859}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4481FB10-6906-47E0-9438-71BD8436A859}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4481FB10-6906-47E0-9438-71BD8436A859}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E9F0C39-C7E1-4882-B7B1-5F133BEF2F82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E9F0C39-C7E1-4882-B7B1-5F133BEF2F82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E9F0C39-C7E1-4882-B7B1-5F133BEF2F82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E9F0C39-C7E1-4882-B7B1-5F133BEF2F82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
