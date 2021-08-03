@@ -19,10 +19,10 @@ namespace OffLogs.Client.AspNetCore.Sender
         private readonly ConcurrentQueue<LogDto> _queue;
         private readonly Timer _timer;
 
-        public OffLogsLogSender()
+        public OffLogsLogSender(IHttpClient httpClient)
         {
             _queue = new ConcurrentQueue<LogDto>();
-            _httpClient = new HttpClient();
+            _httpClient = httpClient;
             _timer = new Timer();
             _timer.Elapsed += SendingTimer_Elapsed;
             _timer.Interval = SendingInteval;

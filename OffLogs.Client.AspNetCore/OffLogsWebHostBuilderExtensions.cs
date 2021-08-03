@@ -18,6 +18,9 @@ namespace OffLogs.Client.AspNetCore
                 ServiceDescriptor.Singleton<IOffLogsLogSender, OffLogsLogSender>()
             );
             builder.Services.TryAddEnumerable(
+                ServiceDescriptor.Singleton<IHttpClient, HttpClient>()
+            );
+            builder.Services.TryAddEnumerable(
                 ServiceDescriptor.Singleton<ILoggerProvider, OfflogsLoggerProvider>()
             );
             LoggerProviderOptions.RegisterProviderOptions<OffLogsLoggerConfiguration, OfflogsLoggerProvider>(
