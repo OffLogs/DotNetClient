@@ -27,6 +27,14 @@ namespace Offlogs.Client.TestApp.AspNetCore3.Controllers
         public IEnumerable<WeatherForecast> Get()
         {
             _logger.LogError("This is error");
+            try
+            {
+                throw new Exception("Bla");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+            }
 
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast

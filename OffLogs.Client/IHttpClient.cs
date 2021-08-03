@@ -12,6 +12,8 @@ namespace OffLogs.Client
 {
     public interface IHttpClient: IDisposable
     {
+        void SetApiToken(string apiToken);
+
         Task SendLog(
             LogLevel level,
             string message,

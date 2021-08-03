@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Configuration;
+using OffLogs.Client.AspNetCore.Sender;
 using System;
 
 namespace OffLogs.Client.AspNetCore
@@ -13,6 +14,9 @@ namespace OffLogs.Client.AspNetCore
         )
         {
             builder.AddConfiguration();
+            builder.Services.TryAddEnumerable(
+                ServiceDescriptor.Singleton<IOffLogsLogSender, OffLogsLogSender>()
+            );
             builder.Services.TryAddEnumerable(
                 ServiceDescriptor.Singleton<ILoggerProvider, OfflogsLoggerProvider>()
             );

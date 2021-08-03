@@ -72,5 +72,21 @@ namespace Offlogs.Client.Tests.Clients
             });
         }
         #endregion
+
+        #region Configuration tests
+        [Theory]
+        [InlineData(LogLevel.Error)]
+        [InlineData(LogLevel.Debug)]
+        [InlineData(LogLevel.Information)]
+        [InlineData(LogLevel.Trace)]
+        [InlineData(LogLevel.Warning)]
+        [InlineData(LogLevel.None)]
+        public async Task ShouldSetApiTokenAndSendLogAsync(LogLevel logLevel)
+        {
+            var client = new HttpClient();
+            client.SetApiToken(ApiToken);
+            await client.SendLogAsync(logLevel, "Some Debug message");
+        }
+        #endregion
     }
 }

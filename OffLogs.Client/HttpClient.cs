@@ -14,18 +14,27 @@ namespace OffLogs.Client
         private readonly string _apiUrl = "https://api.offlogs.com/log/add";
 
         private readonly System.Net.Http.HttpClient _client;
-        private readonly string _apiToken;
+        private string _apiToken;
 
-        public HttpClient(string apiToken)
+        public HttpClient()
         {
-            _apiToken = apiToken;
             _client = new System.Net.Http.HttpClient();
             _client.Timeout = TimeSpan.FromSeconds(3);
+        }
+
+        public HttpClient(string apiToken): this()
+        {
+            _apiToken = apiToken;
         }
 
         public void Dispose()
         {
             _client.Dispose();
+        }
+
+        public void SetApiToken(string apiToken)
+        {
+            _apiToken = apiToken;
         }
 
         public async Task SendLog(

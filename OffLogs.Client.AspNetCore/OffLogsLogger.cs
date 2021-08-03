@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using OffLogs.Client.AspNetCore.Sender;
 using System;
 
 namespace OffLogs.Client.AspNetCore
@@ -7,11 +8,21 @@ namespace OffLogs.Client.AspNetCore
     {
         private readonly string _name;
         private readonly Func<OffLogsLoggerConfiguration> _getCurrentConfig;
+        private readonly Func<IOffLogsLogSender> _getOffLogsSender;
 
         public OffLogsLogger(
             string name,
-            Func<OffLogsLoggerConfiguration> getCurrentConfig
-        ) => (_name, _getCurrentConfig) = (name, getCurrentConfig);
+            Func<OffLogsLoggerConfiguration> getCurrentConfig,
+            Func<IOffLogsLogSender> getOffLogsSender
+        ) => (
+            _name,
+            _getCurrentConfig,
+            _getOffLogsSender
+        ) = (
+            name,
+            getCurrentConfig,
+            getOffLogsSender
+        );
 
         public IDisposable BeginScope<TState>(TState state) => default;
 
@@ -29,8 +40,16 @@ namespace OffLogs.Client.AspNetCore
                 return;
             }
 
-            OffLogsLoggerConfiguration config = _getCurrentConfig();
-            Console.WriteLine($"     {_name} - {formatter(state, exception)}");
+            var config = _getCurrentConfig();
+            var sender = _getOffLogsSender();
+            if (exception == null)
+            {
+                sender.SendAsync(logLevel, $"{_name} - {formatter(state, exception)}").Wait();
+            }
+            else
+            {
+                sender.SendAsync(logLevel, exception).Wait();
+            }
         }
     }
 }
