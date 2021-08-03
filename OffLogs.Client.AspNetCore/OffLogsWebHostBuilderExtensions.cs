@@ -12,7 +12,8 @@ namespace OffLogs.Client.AspNetCore
     public static class OffLogsWebHostBuilderExtensions
     {
         public static ILoggingBuilder AddOffLogsLogger(
-        this ILoggingBuilder builder)
+            this ILoggingBuilder builder
+        )
         {
             builder.AddConfiguration();
 
@@ -29,7 +30,8 @@ namespace OffLogs.Client.AspNetCore
 
         public static ILoggingBuilder AddColorConsoleLogger(
             this ILoggingBuilder builder,
-            Action<OffLogsLoggerConfiguration> configure)
+            Action<OffLogsLoggerConfiguration> configure
+        )
         {
             builder.AddOffLogsLogger();
             builder.Services.Configure(configure);

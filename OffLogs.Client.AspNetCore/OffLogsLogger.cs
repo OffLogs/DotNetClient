@@ -12,13 +12,12 @@ namespace OffLogs.Client.AspNetCore
 
         public OffLogsLogger(
             string name,
-            Func<OffLogsLoggerConfiguration> getCurrentConfig) =>
-            (_name, _getCurrentConfig) = (name, getCurrentConfig);
+            Func<OffLogsLoggerConfiguration> getCurrentConfig
+        ) => (_name, _getCurrentConfig) = (name, getCurrentConfig);
 
         public IDisposable BeginScope<TState>(TState state) => default;
 
-        public bool IsEnabled(LogLevel logLevel) =>
-            _getCurrentConfig().LogLevels.ContainsKey(logLevel);
+        public bool IsEnabled(LogLevel logLevel) => logLevel >= _getCurrentConfig().MinLogLevel;
 
         public void Log<TState>(
             LogLevel logLevel,
@@ -33,16 +32,7 @@ namespace OffLogs.Client.AspNetCore
             }
 
             OffLogsLoggerConfiguration config = _getCurrentConfig();
-            if (config.EventId == 0 || config.EventId == eventId.Id)
-            {
-                ConsoleColor originalColor = Console.ForegroundColor;
-
-                Console.ForegroundColor = config.LogLevels[logLevel];
-                Console.WriteLine($"[{eventId.Id,2}: {logLevel,-12}]");
-
-                Console.ForegroundColor = originalColor;
-                Console.WriteLine($"     {_name} - {formatter(state, exception)}");
-            }
+            Console.WriteLine($"     {_name} - {formatter(state, exception)}");
         }
     }
 }

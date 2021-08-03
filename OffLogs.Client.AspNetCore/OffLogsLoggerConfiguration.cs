@@ -7,11 +7,8 @@ namespace OffLogs.Client.AspNetCore
 {
     public class OffLogsLoggerConfiguration
     {
-        public int EventId { get; set; }
+        public string ApiToken { get; set; }
 
-        public Dictionary<LogLevel, ConsoleColor> LogLevels { get; set; } = new()
-        {
-            [LogLevel.Information] = ConsoleColor.Green
-        };
+        public LogLevel MinLogLevel { get; set; } = LogLevel.Warning;
     }
 }
