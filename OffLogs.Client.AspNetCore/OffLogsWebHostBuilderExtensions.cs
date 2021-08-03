@@ -1,11 +1,8 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Configuration;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace OffLogs.Client.AspNetCore
 {
@@ -16,11 +13,9 @@ namespace OffLogs.Client.AspNetCore
         )
         {
             builder.AddConfiguration();
-
             builder.Services.TryAddEnumerable(
                 ServiceDescriptor.Singleton<ILoggerProvider, OfflogsLoggerProvider>()
             );
-
             LoggerProviderOptions.RegisterProviderOptions<OffLogsLoggerConfiguration, OfflogsLoggerProvider>(
                 builder.Services
             );
@@ -33,6 +28,9 @@ namespace OffLogs.Client.AspNetCore
             Action<OffLogsLoggerConfiguration> configure
         )
         {
+            if (configure == null)
+                throw new ArgumentNullException(nameof(configure));
+
             builder.AddOffLogsLogger();
             builder.Services.Configure(configure);
 

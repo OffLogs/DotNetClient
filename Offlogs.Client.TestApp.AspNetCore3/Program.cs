@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using OffLogs.Client.AspNetCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +19,8 @@ namespace Offlogs.Client.TestApp.AspNetCore3
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureLogging(logging => { 
-                    
+                .ConfigureLogging(logging => {
+                    logging.AddOffLogsLogger();
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

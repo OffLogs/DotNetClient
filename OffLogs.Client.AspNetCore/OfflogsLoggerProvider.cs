@@ -14,7 +14,8 @@ namespace OffLogs.Client.AspNetCore
         private readonly ConcurrentDictionary<string, OffLogsLogger> _loggers = new ConcurrentDictionary<string, OffLogsLogger>();
 
         public OfflogsLoggerProvider(
-            IOptionsMonitor<OffLogsLoggerConfiguration> config)
+            IOptionsMonitor<OffLogsLoggerConfiguration> config
+        )
         {
             _currentConfig = config.CurrentValue;
             _onChangeToken = config.OnChange(updatedConfig => _currentConfig = updatedConfig);
