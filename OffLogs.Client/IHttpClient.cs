@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OffLogs.Client
 {
-    public interface IOfflogsHttpClient: IDisposable
+    public interface IHttpClient: IDisposable
     {
         Task SendLog(
             LogLevel level,

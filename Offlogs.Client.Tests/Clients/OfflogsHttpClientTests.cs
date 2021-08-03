@@ -11,11 +11,11 @@ namespace Offlogs.Client.Tests.Clients
 {
     public class OfflogsHttpClientTests: BaseTest
     {
-        private readonly OfflogsHttpClient Client;
+        private readonly HttpClient Client;
 
         public OfflogsHttpClientTests()
         {
-            Client = new OfflogsHttpClient(ApiToken);
+            Client = new HttpClient(ApiToken);
         }
 
         #region Without errors
