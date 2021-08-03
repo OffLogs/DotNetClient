@@ -2,6 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <Description>Client for sending requests to OffLogs API.</Description>
+    <PackageProjectUrl>https://offlogs.com</PackageProjectUrl>
+    <PackageTags>api logs offlogs</PackageTags>
+    <NeutralLanguage />
+    <Authors>Heorhii Shira</Authors>
+    <Company>OffLogs</Company>
+    <Copyright>Copyright (c) OffLogs 2021</Copyright>
+    <RepositoryUrl>https://github.com/OffLogs/DotNetClient</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
