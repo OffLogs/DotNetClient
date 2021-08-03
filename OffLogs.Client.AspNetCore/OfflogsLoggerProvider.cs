@@ -23,6 +23,7 @@ namespace OffLogs.Client.AspNetCore
         {
             _currentConfig = config.CurrentValue;
             _offLogsLogSender = offLogsLogSender;
+            _offLogsLogSender.SetApiToken(_currentConfig.ApiToken);
             _onChangeToken = config.OnChange(updatedConfig => {
                 _currentConfig = updatedConfig;
                 _offLogsLogSender.SetApiToken(_currentConfig.ApiToken);

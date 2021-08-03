@@ -32,31 +32,8 @@ namespace OffLogs.Client.AspNetCore.Sender
         private void SendingTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             _timer.Stop();
-            var logsToSend = new List<LogDto>();
-            while (true)
-            {
-                var isExists = _queue.TryDequeue(out var logDto);
-                if (!isExists || logsToSend.Count >= BatchSize)
-                {
-                    break;
-                }
-                if (isExists)
-                {
-                    logsToSend.Add(logDto);
-                }
-            }
-            try
-            {
-                _httpClient.SendLogsAsync(logsToSend);
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine($"OffLogs logger error: {exception.Message} - {exception.StackTrace}");
-            }
-            finally
-            {
-                _timer.Start();
-            }
+            SendLogsBanchAsync().Wait();
+            _timer.Start();
         }
 
         public void Dispose()
@@ -94,6 +71,38 @@ namespace OffLogs.Client.AspNetCore.Sender
             }
             _queue.Enqueue(logDto);
             return Task.CompletedTask;
+        }
+
+        private async Task SendLogsBanchAsync()
+        {
+            var logsToSend = new List<LogDto>();
+            while (true)
+            {
+                var isExists = _queue.TryDequeue(out var logDto);
+                if (!isExists || logsToSend.Count >= BatchSize)
+                {
+                    break;
+                }
+                if (isExists)
+                {
+                    logsToSend.Add(logDto);
+                }
+            }
+            try
+            {
+                await _httpClient.SendLogsAsync(logsToSend);
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine($"OffLogs logger error: {exception.Message} - {exception.StackTrace}");
+            }
+
+            // logs can be produced faster than 50 times per second,
+            // so we continue the process until the list of logs runs out
+            if (!_queue.IsEmpty)
+            {
+                await SendLogsBanchAsync();
+            }
         }
 
         private LogDto CreateDto(LogLevel level, string message)
