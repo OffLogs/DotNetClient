@@ -25,9 +25,9 @@ namespace Offlogs.Client.Tests.IntegrationTests.AspNetCore3
             builder.ConfigureServices(services =>
             {
                 // We can further customize our application setup here.
-                var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(IHttpClient));
+                var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(IOffLogsHttpClient));
                 services.Remove(descriptor);
-                services.AddSingleton<IHttpClient, FakeHttpClient>();
+                services.AddSingleton<IOffLogsHttpClient, FakeHttpClient>();
             });
         }
 

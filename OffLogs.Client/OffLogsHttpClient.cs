@@ -9,20 +9,20 @@ using System.Threading.Tasks;
 
 namespace OffLogs.Client
 {
-    public class HttpClient: IHttpClient
+    public class OffLogsHttpClient: IOffLogsHttpClient
     {
         private readonly string _apiUrl = "https://api.offlogs.com/log/add";
 
         private readonly System.Net.Http.HttpClient _client;
         private string _apiToken;
 
-        public HttpClient()
+        public OffLogsHttpClient()
         {
             _client = new System.Net.Http.HttpClient();
             _client.Timeout = TimeSpan.FromSeconds(3);
         }
 
-        public HttpClient(string apiToken): this()
+        public OffLogsHttpClient(string apiToken): this()
         {
             _apiToken = apiToken;
         }

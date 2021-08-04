@@ -15,11 +15,11 @@ namespace OffLogs.Client.AspNetCore.Sender
         private const int BatchSize = 50;
         private const double SendingInteval = 5000;
 
-        private readonly IHttpClient _httpClient;
+        private readonly IOffLogsHttpClient _httpClient;
         private readonly ConcurrentQueue<LogDto> _queue;
         private readonly Timer _timer;
 
-        public OffLogsLogSender(IHttpClient httpClient)
+        public OffLogsLogSender(IOffLogsHttpClient httpClient)
         {
             _queue = new ConcurrentQueue<LogDto>();
             _httpClient = httpClient;

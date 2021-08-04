@@ -18,7 +18,7 @@ namespace Offlogs.Client.Tests.IntegrationTests.AspNetCore3
         public AspNetCore3BaseTest(AspNetCore3WebApplicationFactory factory)
         {
             _factory = factory;
-            _offlogsHttpClient = _factory.Services.GetService(typeof(IHttpClient)) as FakeHttpClient;
+            _offlogsHttpClient = _factory.Services.GetService(typeof(IOffLogsHttpClient)) as FakeHttpClient;
         }
 
         public void Dispose()

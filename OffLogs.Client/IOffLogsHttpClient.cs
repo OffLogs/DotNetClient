@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OffLogs.Client
 {
-    public interface IHttpClient: IDisposable
+    public interface IOffLogsHttpClient: IDisposable
     {
         void SetApiToken(string apiToken);
 

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Offlogs.Client.Tests.Fakers
 {
-    public class FakeHttpClient : IHttpClient
+    public class FakeHttpClient : IOffLogsHttpClient
     {
         public List<List<LogDto>> SentBanches = new List<List<LogDto>>();
 
