@@ -22,6 +22,9 @@ namespace Offlogs.Client.TestApp.AspNetCore3
                 .ConfigureLogging(logging => {
                     logging.AddOffLogsLogger();
                 })
+                .ConfigureAppConfiguration(builder => {
+                    builder.AddJsonFile("appsettings.Local.json", optional: true);
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

@@ -12,21 +12,40 @@ namespace OffLogs.Client.AspNetCore
     public sealed class OfflogsLoggerProvider : ILoggerProvider
     {
         private readonly IDisposable _onChangeToken;
-        private OffLogsLoggerConfiguration _currentConfig;
+        private OffLogsLoggerConfiguration _offLogsConfig;
         private readonly ConcurrentDictionary<string, OffLogsLogger> _loggers = new ConcurrentDictionary<string, OffLogsLogger>();
         private readonly IOffLogsLogSender _offLogsLogSender;
+        private readonly IConfiguration _configuration;
+
+        private string ApiToken
+        {
+            get {
+                if (!string.IsNullOrEmpty(_offLogsConfig.ApiToken))
+                {
+                    return _offLogsConfig.ApiToken;
+                }
+                var apiTokenFromAppSettings = _configuration.GetValue<string>("OffLogs:ApiToken");
+                if (!string.IsNullOrEmpty(apiTokenFromAppSettings))
+                {
+                    return apiTokenFromAppSettings;
+                }
+                throw new ArgumentNullException("OffLogs API token not found!");
+            }
+        }
 
         public OfflogsLoggerProvider(
             IOptionsMonitor<OffLogsLoggerConfiguration> config,
-            IOffLogsLogSender offLogsLogSender
+            IOffLogsLogSender offLogsLogSender,
+            IConfiguration configuration
         )
         {
-            _currentConfig = config.CurrentValue;
+            _configuration = configuration;
+            _offLogsConfig = config.CurrentValue;
             _offLogsLogSender = offLogsLogSender;
-            _offLogsLogSender.SetApiToken(_currentConfig.ApiToken);
+            _offLogsLogSender.SetApiToken(ApiToken);
             _onChangeToken = config.OnChange(updatedConfig => {
-                _currentConfig = updatedConfig;
-                _offLogsLogSender.SetApiToken(_currentConfig.ApiToken);
+                _offLogsConfig = updatedConfig;
+                _offLogsLogSender.SetApiToken(_offLogsConfig.ApiToken);
             });
         }
 
@@ -37,7 +56,7 @@ namespace OffLogs.Client.AspNetCore
             });
         }
 
-        private OffLogsLoggerConfiguration GetCurrentConfig() => _currentConfig;
+        private OffLogsLoggerConfiguration GetCurrentConfig() => _offLogsConfig;
 
         private IOffLogsLogSender GetLogSender() => _offLogsLogSender;
 
