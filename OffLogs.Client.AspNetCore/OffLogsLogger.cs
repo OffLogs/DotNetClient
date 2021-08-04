@@ -9,24 +9,28 @@ namespace OffLogs.Client.AspNetCore
         private readonly string _name;
         private readonly Func<OffLogsLoggerConfiguration> _getCurrentConfig;
         private readonly Func<IOffLogsLogSender> _getOffLogsSender;
+        private readonly Func<LogLevel> _getMinLogLevel;
 
         public OffLogsLogger(
             string name,
             Func<OffLogsLoggerConfiguration> getCurrentConfig,
-            Func<IOffLogsLogSender> getOffLogsSender
+            Func<IOffLogsLogSender> getOffLogsSender,
+            Func<LogLevel> getMinLogLevel
         ) => (
             _name,
             _getCurrentConfig,
-            _getOffLogsSender
+            _getOffLogsSender,
+            _getMinLogLevel
         ) = (
             name,
             getCurrentConfig,
-            getOffLogsSender
+            getOffLogsSender,
+            getMinLogLevel
         );
 
         public IDisposable BeginScope<TState>(TState state) => default;
 
-        public bool IsEnabled(LogLevel logLevel) => logLevel >= _getCurrentConfig().MinLogLevel;
+        public bool IsEnabled(LogLevel logLevel) => logLevel >= _getMinLogLevel();
 
         public void Log<TState>(
             LogLevel logLevel,

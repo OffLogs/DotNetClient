@@ -32,7 +32,8 @@ namespace Offlogs.Client.Tests.Fakers
 
         public Task SendLogsAsync(ICollection<LogDto> logs)
         {
-            SentBanches.Add(logs.ToList());
+            if (logs.Count > 0)
+                SentBanches.Add(logs.ToList());
             return Task.CompletedTask;
         }
 

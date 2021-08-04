@@ -10,6 +10,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Offlogs.Client.Tests.Extensions;
+using OffLogs.Client;
+using Offlogs.Client.Tests.Fakers;
+using Offlogs.Client.TestApp.AspNetCore3;
+using System.Reflection;
+using OffLogs.Client.AspNetCore;
 
 namespace Offlogs.Client.Tests.IntegrationTests.AspNetCore3
 {
@@ -20,6 +25,9 @@ namespace Offlogs.Client.Tests.IntegrationTests.AspNetCore3
             builder.ConfigureServices(services =>
             {
                 // We can further customize our application setup here.
+                var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(IHttpClient));
+                services.Remove(descriptor);
+                services.AddSingleton<IHttpClient, FakeHttpClient>();
             });
         }
 
@@ -33,11 +41,15 @@ namespace Offlogs.Client.Tests.IntegrationTests.AspNetCore3
             var builder = Host.CreateDefaultBuilder()
                 .ConfigureWebHostDefaults(builder =>
                 {
-                    builder.UseStartup<AspNetCore3TestStartup>()
+                    builder.UseStartup<Startup>()
                         .UseContentRoot(Directory.GetCurrentDirectory())
+                        .ConfigureLogging(logging =>
+                        {
+                            logging.AddOffLogsLogger();
+                        })
                         .ConfigureTestServices(services =>
                         {
-                            //services.AddScoped<IDataFactoryService, DataFactoryService>();
+                            
                             // We can further customize our application setup here.
                         })
                         .ConfigureAppConfiguration(builder =>

@@ -33,6 +33,22 @@ namespace OffLogs.Client.AspNetCore
             }
         }
 
+        private LogLevel MinLogLevel
+        {
+            get
+            {
+                var minLogLevelFromConfig = _configuration.GetValue<string>("OffLogs:MinLogLevel");
+                if (!string.IsNullOrEmpty(minLogLevelFromConfig))
+                {
+                    if (Enum.TryParse<LogLevel>(minLogLevelFromConfig, out var logLevel))
+                    {
+                        return logLevel;
+                    }
+                }
+                return _offLogsConfig.MinLogLevel;
+            }
+        }
+
         public OfflogsLoggerProvider(
             IOptionsMonitor<OffLogsLoggerConfiguration> config,
             IOffLogsLogSender offLogsLogSender,
@@ -52,11 +68,13 @@ namespace OffLogs.Client.AspNetCore
         public ILogger CreateLogger(string categoryName)
         {
             return _loggers.GetOrAdd(categoryName, name => {
-                return new OffLogsLogger(name, GetCurrentConfig, GetLogSender);
+                return new OffLogsLogger(name, GetCurrentConfig, GetLogSender, GetMinLogLevel);
             });
         }
 
         private OffLogsLoggerConfiguration GetCurrentConfig() => _offLogsConfig;
+
+        private LogLevel GetMinLogLevel() => MinLogLevel;
 
         private IOffLogsLogSender GetLogSender() => _offLogsLogSender;
 
