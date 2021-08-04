@@ -14,7 +14,7 @@ pool:
 variables:
   buildConfiguration: 'Testing'
   Environment: 'Testing'
-  OffLogs__TestApiToken: $(APITOKEN)
+  OffLogs__ApiToken: $(APITOKEN)
   
 steps: 
   - task: UseDotNet@2
