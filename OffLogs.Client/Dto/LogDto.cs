@@ -15,6 +15,9 @@ namespace OffLogs.Client.Dto
         [JsonProperty]
         public string Level { get; }
 
+        [JsonIgnore]
+        public LogLevel OriginalLevel { get; }
+
         [JsonProperty]
         public DateTime Timestamp { get; }
 
@@ -32,6 +35,7 @@ namespace OffLogs.Client.Dto
             if (string.IsNullOrEmpty(message))
                 throw new ArgumentNullException(nameof(message));
 
+            OriginalLevel = level;
             Level = OffLogsLogLevel.GetFromLogLevel(level).GetValue();
             Message = message;
             Timestamp = timestamp ?? DateTime.Now;

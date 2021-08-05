@@ -14,7 +14,7 @@ pool:
 variables:
   buildConfiguration: 'Testing'
   Environment: 'Testing'
-  OffLogs__TestApiToken: $(APITOKEN)
+  OffLogs__ApiToken: $(APITOKEN)
   
 steps: 
   - task: UseDotNet@2
@@ -25,6 +25,7 @@ steps:
   
   - script: |
       echo "{}" > Offlogs.Client.Tests/appsettings.Local.json
+      echo "{}" > Offlogs.Client.TestApp.AspNetCore3/appsettings.Local.json
     displayName: 'Create empty config file'
 
   - task: DotNetCoreCLI@2

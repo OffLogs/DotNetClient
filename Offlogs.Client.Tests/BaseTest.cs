@@ -14,14 +14,14 @@ namespace Offlogs.Client.Tests
 
         protected string ApiToken
         {
-            get => Configuration.GetValue<string>("OffLogs:TestApiToken");
+            get => Configuration.GetValue<string>("OffLogs:ApiToken");
         }
 
         static BaseTest()
         {
             Configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
-                .AddJsonFile("appsettings.Local.json")
+                .AddJsonFile("appsettings.Local.json", optional: true)
                 .AddEnvironmentVariables()
                 .Build();
         }

@@ -11,11 +11,11 @@ namespace Offlogs.Client.Tests.Clients
 {
     public class OfflogsHttpClientTests: BaseTest
     {
-        private readonly HttpClient Client;
+        private readonly OffLogsHttpClient Client;
 
         public OfflogsHttpClientTests()
         {
-            Client = new HttpClient(ApiToken);
+            Client = new OffLogsHttpClient(ApiToken);
         }
 
         #region Without errors
@@ -70,6 +70,22 @@ namespace Offlogs.Client.Tests.Clients
             await Assert.ThrowsAsync<ArgumentNullException>(async () => {
                 await Client.SendLogAsync(LogLevel.Debug, "");
             });
+        }
+        #endregion
+
+        #region Configuration tests
+        [Theory]
+        [InlineData(LogLevel.Error)]
+        [InlineData(LogLevel.Debug)]
+        [InlineData(LogLevel.Information)]
+        [InlineData(LogLevel.Trace)]
+        [InlineData(LogLevel.Warning)]
+        [InlineData(LogLevel.None)]
+        public async Task ShouldSetApiTokenAndSendLogAsync(LogLevel logLevel)
+        {
+            var client = new OffLogsHttpClient();
+            client.SetApiToken(ApiToken);
+            await client.SendLogAsync(logLevel, "Some Debug message");
         }
         #endregion
     }
