@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+	<id>$id$</id>
+	<version>$version$</version>
+	<title>OffLogs.Client</title>
+    <authors>Heorhii Shira</authors>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <license type="expression">Apache-2.0</license>
+    <projectUrl>https://offlogs.com</projectUrl>
+    <description>Client for sending requests to OffLogs API.</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright (c) OffLogs 2021</copyright>
+    <tags>api logs offlogs</tags>
+	<repository type="git" url="https://github.com/OffLogs/DotNetClient"></repository>
+  </metadata>
+</package>

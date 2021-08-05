@@ -2,6 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <Authors>Heorhii Shira</Authors>
+    <Company>OffLogs</Company>
+    <Description>Client for sending requests to OffLogs API.</Description>
+    <Copyright>Copyright (c) OffLogs 2021</Copyright>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://offlogs.com</PackageProjectUrl>
+    <PackageTags>api logs offlogs dotnet</PackageTags>
+    <RepositoryUrl>https://github.com/OffLogs/DotNetClient/tree/dev/OffLogs.Client.AspNetCore</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <FileVersion>1.0.0.1</FileVersion>
+    <Version>1.0.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
