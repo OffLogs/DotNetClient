@@ -1,14 +1,13 @@
-﻿using Microsoft.Extensions.Logging;
-using OffLogs.Client.Dto;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using Microsoft.Extensions.Logging;
+using OffLogs.Client.Dto;
 
-namespace OffLogs.Client.AspNetCore.Sender
+namespace OffLogs.Client.Senders
 {
     public class OffLogsLogSender : IOffLogsLogSender
     {
@@ -32,7 +31,7 @@ namespace OffLogs.Client.AspNetCore.Sender
         private void SendingTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             _timer.Stop();
-            SendLogsBanchAsync().Wait();
+            SendLogsBunchAsync().Wait();
             _timer.Start();
         }
 
@@ -73,7 +72,7 @@ namespace OffLogs.Client.AspNetCore.Sender
             return Task.CompletedTask;
         }
 
-        private async Task SendLogsBanchAsync()
+        private async Task SendLogsBunchAsync()
         {
             var logsToSend = new List<LogDto>();
             while (true)
@@ -101,7 +100,7 @@ namespace OffLogs.Client.AspNetCore.Sender
             // so we continue the process until the list of logs runs out
             if (!_queue.IsEmpty)
             {
-                await SendLogsBanchAsync();
+                await SendLogsBunchAsync();
             }
         }
 

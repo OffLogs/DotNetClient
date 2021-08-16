@@ -9,7 +9,8 @@ Add to your `appsettings.json`:
 ```
 {
 	"OffLogs": {
-		"ApiToken": "<your application API token>"
+		"ApiToken": "<your application API token>",
+		"MinLogLevel": "Error"
 	}
 }
 ```
