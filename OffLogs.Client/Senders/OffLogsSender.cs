@@ -45,9 +45,13 @@ namespace OffLogs.Client.Senders
             _httpClient.SetApiToken(apiToken);
         }
 
-        public Task SendAsync(LogLevel level, string message)
+        public Task SendAsync(LogLevel level, string message, IDictionary<string, string> properties = null)
         {
             var logDto = CreateDto(level, message);
+            if (properties != null)
+            {
+                logDto.AddProperties(properties);    
+            }
             _queue.Enqueue(logDto);
             return Task.CompletedTask;
         }

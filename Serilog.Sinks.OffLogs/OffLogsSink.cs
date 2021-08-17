@@ -32,8 +32,18 @@ namespace Serilog.Sinks.OffLogs
  
         public void Emit(LogEvent logEvent)
         {
+            if (logEvent.Exception != null)
+            {
+                _offLogsLogSender.SendAsync(
+                    logEvent.Level.GetDotNetLogLevel(),
+                    logEvent.Exception
+                );
+                return;
+            }
+
             // _offLogsLogSender.SendAsync(
-            //     
+            //     logEvent.Level.GetDotNetLogLevel(),
+            //     LogLevel
             // );
         }
 
