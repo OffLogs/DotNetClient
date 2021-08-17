@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using OffLogs.Client;
 using OffLogs.Client.Senders;
@@ -7,13 +9,13 @@ using Serilog.Events;
 
 namespace Serilog.Sinks.OffLogs
 {
-    public class OffLogsSink : ILogEventSink, IDisposable
+    public class OffLogsSink : ILogEventSink
     {
         private readonly string _apiToken;
         private readonly LogEventLevel _restrictedToMinimumLevel;
         private readonly IOffLogsHttpClient _offLogsHttpClient;
         private readonly IOffLogsLogSender _offLogsLogSender;
-        
+
         /// <param name="apiToken">OffLogs api token</param>
         /// <param name="restrictedToMinimumLevel">
         /// The minimum level for events passed through the sink.
@@ -29,7 +31,7 @@ namespace Serilog.Sinks.OffLogs
             _offLogsHttpClient.SetApiToken(apiToken);
             _offLogsLogSender = new OffLogsLogSender(_offLogsHttpClient);
         }
- 
+
         public void Emit(LogEvent logEvent)
         {
             if (logEvent.Exception != null)
@@ -40,14 +42,17 @@ namespace Serilog.Sinks.OffLogs
                 );
                 return;
             }
-
-            // _offLogsLogSender.SendAsync(
-            //     logEvent.Level.GetDotNetLogLevel(),
-            //     LogLevel
-            // );
+            var proprties = logEvent.Properties
+                .ToDictionary(k => k.Key, v => v.Value.ToString());
+            var message = logEvent.RenderMessage();
+            _offLogsLogSender.SendAsync(
+                logEvent.Level.GetDotNetLogLevel(),
+                message,
+                proprties
+            );
         }
 
-        public void Dispose()
+        ~OffLogsSink()
         {
             _offLogsHttpClient?.Dispose();
             _offLogsLogSender?.Dispose();

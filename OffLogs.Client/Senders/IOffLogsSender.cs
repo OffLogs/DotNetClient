@@ -8,7 +8,12 @@ namespace OffLogs.Client.Senders
     public interface IOffLogsLogSender: IDisposable
     {
         void SetApiToken(string apiToken);
-        Task SendAsync(LogLevel level, string message, IDictionary<string, string> properties = null);
+        Task SendAsync(
+            LogLevel level,
+            string message,
+            IDictionary<string, string> properties = null,
+            DateTime? timestamp = null
+        );
         Task SendAsync(LogLevel level, Exception exception);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Offlogs.Client.Tests.Core;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,11 +20,7 @@ namespace Offlogs.Client.Tests
 
         static BaseTest()
         {
-            Configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
-                .AddJsonFile("appsettings.Local.json", optional: true)
-                .AddEnvironmentVariables()
-                .Build();
+            Configuration = TestUtils.BuildConfiguration();
         }
 
         public BaseTest()

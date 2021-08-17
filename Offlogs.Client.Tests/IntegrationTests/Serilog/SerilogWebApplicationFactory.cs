@@ -11,6 +11,10 @@ using Offlogs.Client.TestApp.AspNetCore3;
 using Offlogs.Client.Tests.Extensions;
 using Offlogs.Client.Tests.Fakers;
 using Serilog;
+using Serilog.Sinks.OffLogs;
+using Serilog.Events;
+using Offlogs.Client.Tests.Core;
+using Microsoft.Extensions.Configuration;
 
 namespace Offlogs.Client.Tests.IntegrationTests.Serilog
 {
@@ -34,11 +38,12 @@ namespace Offlogs.Client.Tests.IntegrationTests.Serilog
 
         protected override IHostBuilder CreateHostBuilder()
         {
+            var configuration = TestUtils.BuildConfiguration();
+
             using var log = new LoggerConfiguration()
                 .MinimumLevel.Information()
                 .WriteTo.Console()
-                .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
-                // .WriteTo.
+                .WriteTo.OffLogs(configuration, LogEventLevel.Verbose)
                 .CreateLogger();
             
             var builder = Host.CreateDefaultBuilder()
