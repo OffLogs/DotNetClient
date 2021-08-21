@@ -50,7 +50,7 @@ stages:
           displayName: 'Create nuget packages'
           inputs:
             command: 'pack'
-            packagesToPack: 'Nuget/**/*.csproj;!**/*.Tests.csproj;!**/*.AspNetCore3.csproj'
+            packagesToPack: 'OffLogs.Client/**/*.csproj;!**/*.Tests.csproj;!**/*.AspNetCore3.csproj'
             packDirectory: '$(Build.ArtifactStagingDirectory)/packages/nuget'
             nobuild: true
             versioningScheme: 'byBuildNumber'
