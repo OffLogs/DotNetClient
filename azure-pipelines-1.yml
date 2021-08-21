@@ -45,15 +45,15 @@ stages:
             configuration: '$(buildConfiguration)'
         
         - task: DotNetCoreCLI@2
-            displayName: 'Create nuget packages'
-            inputs:
-              command: 'pack'
-              packagesToPack: 'Nuget/**/*.csproj;!**/*.Test.csproj'
-              packDirectory: '$(Build.ArtifactStagingDirectory)/packages/nuget'
-              nobuild: true
-              versioningScheme: 'byBuildNumber'
-        
+          displayName: 'Create nuget packages'
+          inputs:
+            command: 'pack'
+            packagesToPack: 'Nuget/**/*.csproj;!**/*.Test.csproj'
+            packDirectory: '$(Build.ArtifactStagingDirectory)/packages/nuget'
+            nobuild: true
+            versioningScheme: 'byBuildNumber'
+      
         - publish: '$(Build.ArtifactStagingDirectory)/packages/nuget'
-            displayName: 'Publish Artifact: $(ArtifactNugetName)'
-            artifact: 'packages-nuget'
-            condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+          displayName: 'Publish Artifact: $(ArtifactNugetName)'
+          artifact: 'packages-nuget'
+          condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
