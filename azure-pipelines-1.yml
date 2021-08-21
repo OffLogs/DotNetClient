@@ -3,8 +3,10 @@
 # Add steps that publish symbols, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
+name: 1.0.$(rev:.r)
+
 trigger:
-- dev
+  - dev
 
 pool:
   vmImage: 'windows-latest'
@@ -15,6 +17,7 @@ variables:
   buildConfiguration: 'Release'
   ArtifactNugetName: 'packages-nuget'
   BUILD_BUILDNUMBER: '1.0.0.1'
+  ProjectName: 'OffLogs.Client'
 
 stages:
   - stage: build
@@ -59,11 +62,13 @@ stages:
           displayName: 'Create nuget packages'
           inputs:
             command: 'pack'
-            packagesToPack: '**/*.csproj'
+            configuration: $(BuildConfiguration)
+            packagesToPack: '**/$(ProjectName)*.csproj'
             packDestination: '$(Build.ArtifactStagingDirectory)'
-            versioningScheme: 'byEnvVar'
+            # https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/dotnet-core-cli?view=azure-devops#yaml-snippet
+            versioningScheme: byBuildNumber 
         
-        - publish: '$(Build.ArtifactStagingDirectory)/packages/nuget'
-          displayName: 'Publish Artifact: $(ArtifactNugetName)'
-          artifact: 'packages-nuget'
-          condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+        # - publish: '$(Build.ArtifactStagingDirectory)/packages/nuget'
+        #   displayName: 'Publish Artifact: $(ArtifactNugetName)'
+        #   artifact: 'packages-nuget'
+        #   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
