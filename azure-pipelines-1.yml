@@ -16,8 +16,6 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   ArtifactNugetName: 'packages-nuget'
-  # BUILD_BUILDNUMBER: '1.0.0.1'
-  ProjectName: 'OffLogs.Client'
 
 stages:
   - stage: build
@@ -49,19 +47,16 @@ stages:
           inputs:
             command: 'pack'
             configuration: $(BuildConfiguration)
-            packagesToPack: '**/$(ProjectName).csproj'
+            packagesToPack: '**/OffLogs.Client.csproj;**/OffLogs.Client.AspNetCore.csproj;**/Serilog.Sinks.OffLogs.csproj'
             packDestination: '$(Build.ArtifactStagingDirectory)'
             # https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/dotnet-core-cli?view=azure-devops#yaml-snippet
             versioningScheme: byBuildNumber 
         
         - task: NuGetCommand@2
+          displayName: 'Pulish packages to NuGet'
+          condition: succeeded()
           inputs:
             command: 'push'
             packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg'
             nuGetFeedType: 'external'
             publishFeedCredentials: 'NuGetConnection'
-
-        # - publish: '$(Build.ArtifactStagingDirectory)/packages/nuget'
-        #   displayName: 'Publish Artifact: $(ArtifactNugetName)'
-        #   artifact: 'packages-nuget'
-        #   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
