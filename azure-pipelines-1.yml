@@ -3,7 +3,7 @@
 # Add steps that publish symbols, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
-name: 1.0.$(rev:.r)
+name: 1.0.$(DayOfYear).$(Rev:.r)
 
 trigger:
   - dev
@@ -43,20 +43,6 @@ stages:
             msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
             platform: '$(buildPlatform)'
             configuration: '$(buildConfiguration)'
-        
-  #      - task: VSTest@2
-  #        inputs:
-  #          platform: '$(buildPlatform)'
-  #          configuration: '$(buildConfiguration)'
-        
-  #      - task: DotNetCoreCLI@2
-  #        displayName: 'Create nuget packages'
-  #        inputs:
-  #          command: 'pack'
-  #          packagesToPack: 'OffLogs.Client/**/*.csproj;!**/*.Tests.csproj;!**/*.AspNetCore3.csproj'
-  #          packDirectory: '$(Build.ArtifactStagingDirectory)/packages/nuget'
-  #          nobuild: true
-  #          versioningScheme: 'byBuildNumber'
 
         - task: NuGetCommand@2
           displayName: 'Create nuget packages'
