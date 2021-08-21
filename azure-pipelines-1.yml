@@ -3,7 +3,7 @@
 # Add steps that publish symbols, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
-name: 1.0.$(DayOfYear).$(Rev:.r)
+name: 1.$(DayOfYear).$(Rev:.r)
 
 trigger:
   - dev
@@ -27,6 +27,7 @@ stages:
         - task: NuGetToolInstaller@1
         
         - task: NuGetCommand@2
+          displayName: 'Restore solution'
           inputs:
             restoreSolution: '$(solution)'
 
