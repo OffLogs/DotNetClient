@@ -61,6 +61,7 @@ stages:
             command: 'pack'
             packagesToPack: 'OffLogs.Client/**/*.csproj'
             versioningScheme: 'byEnvVar'
+            packDestination: '$(Build.ArtifactStagingDirectory)/packages/nuget'
         
         - publish: '$(Build.ArtifactStagingDirectory)/packages/nuget'
           displayName: 'Publish Artifact: $(ArtifactNugetName)'
