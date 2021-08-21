@@ -3,7 +3,7 @@
 # Add steps that publish symbols, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
-name: 1.0.$(DayOfYear).$(Rev:r)
+name: 1.244.$(DayOfYear).$(Rev:r)
 
 trigger:
   - dev
@@ -38,6 +38,7 @@ stages:
           displayName: 'Create empty config file'
         
         - task: VSBuild@1
+          displayName: 'Build solution'
           inputs:
             solution: '$(solution)'
             msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
