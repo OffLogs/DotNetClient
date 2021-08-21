@@ -3,8 +3,10 @@
 # Add steps that publish symbols, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
+name: 1.244.$(DayOfYear).$(Rev:r)
+
 trigger:
-- dev
+  - dev
 
 pool:
   vmImage: 'windows-latest'
@@ -14,7 +16,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   ArtifactNugetName: 'packages-nuget'
-  BUILD_BUILDNUMBER: '1.0.0.1'
+  BUILD_BUILDNUMBER: ''
 
 stages:
   - stage: build
@@ -26,6 +28,7 @@ stages:
         - task: NuGetToolInstaller@1
         
         - task: NuGetCommand@2
+          displayName: 'Restore solution'
           inputs:
             restoreSolution: '$(solution)'
 
@@ -35,34 +38,28 @@ stages:
           displayName: 'Create empty config file'
         
         - task: VSBuild@1
+          displayName: 'Build solution'
           inputs:
             solution: '$(solution)'
             msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
             platform: '$(buildPlatform)'
             configuration: '$(buildConfiguration)'
-        
-  #      - task: VSTest@2
-  #        inputs:
-  #          platform: '$(buildPlatform)'
-  #          configuration: '$(buildConfiguration)'
-        
-  #      - task: DotNetCoreCLI@2
-  #        displayName: 'Create nuget packages'
-  #        inputs:
-  #          command: 'pack'
-  #          packagesToPack: 'OffLogs.Client/**/*.csproj;!**/*.Tests.csproj;!**/*.AspNetCore3.csproj'
-  #          packDirectory: '$(Build.ArtifactStagingDirectory)/packages/nuget'
-  #          nobuild: true
-  #          versioningScheme: 'byBuildNumber'
 
         - task: NuGetCommand@2
           displayName: 'Create nuget packages'
           inputs:
             command: 'pack'
-            packagesToPack: 'OffLogs.Client/**/*.csproj'
-            versioningScheme: 'byEnvVar'
+            configuration: $(BuildConfiguration)
+            packagesToPack: '**/OffLogs.Client.csproj;**/OffLogs.Client.AspNetCore.csproj;**/Serilog.Sinks.OffLogs.csproj'
+            packDestination: '$(Build.ArtifactStagingDirectory)'
+            # https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/dotnet-core-cli?view=azure-devops#yaml-snippet
+            versioningScheme: byBuildNumber 
         
-        - publish: '$(Build.ArtifactStagingDirectory)/packages/nuget'
-          displayName: 'Publish Artifact: $(ArtifactNugetName)'
-          artifact: 'packages-nuget'
-          condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+        - task: NuGetCommand@2
+          displayName: 'Pulish packages to NuGet'
+          condition: succeeded()
+          inputs:
+            command: 'push'
+            packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg'
+            nuGetFeedType: 'external'
+            publishFeedCredentials: 'NuGetConnection'
