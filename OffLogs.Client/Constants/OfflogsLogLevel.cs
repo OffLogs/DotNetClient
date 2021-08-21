@@ -18,7 +18,11 @@ namespace OffLogs.Client.Constants
 
         public OffLogsLogLevel() { }
 
-        private OffLogsLogLevel(string value, string name) { }
+        private OffLogsLogLevel(string value, string name) 
+        {
+            _Value = value;
+            _Name = name;
+        }
 
         public override string ToString()
         {
@@ -32,6 +36,10 @@ namespace OffLogs.Client.Constants
 
         public static OffLogsLogLevel GetFromLogLevel(LogLevel level)
         {
+            if (level == LogLevel.Error)
+                return Error;
+            if (level == LogLevel.Critical)
+                return Fatal;
             if (level == LogLevel.Debug || level == LogLevel.Trace)
                 return Debug;
             if (level == LogLevel.Warning)

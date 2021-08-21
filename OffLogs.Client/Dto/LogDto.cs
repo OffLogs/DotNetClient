@@ -15,6 +15,9 @@ namespace OffLogs.Client.Dto
         [JsonProperty]
         public string Level { get; }
 
+        [JsonIgnore]
+        public LogLevel OriginalLevel { get; }
+
         [JsonProperty]
         public DateTime Timestamp { get; }
 
@@ -32,6 +35,7 @@ namespace OffLogs.Client.Dto
             if (string.IsNullOrEmpty(message))
                 throw new ArgumentNullException(nameof(message));
 
+            OriginalLevel = level;
             Level = OffLogsLogLevel.GetFromLogLevel(level).GetValue();
             Message = message;
             Timestamp = timestamp ?? DateTime.Now;
@@ -39,6 +43,9 @@ namespace OffLogs.Client.Dto
 
         public void AddProperty(string key, string value)
         {
+            if (string.IsNullOrEmpty(key) || string.IsNullOrEmpty(value))
+                return;
+
             Properties.Add(key, value);
 
             if (Properties.Count >= _propertiesMaxCount)
@@ -53,6 +60,9 @@ namespace OffLogs.Client.Dto
 
         public void AddTrace(string trace)
         {
+            if (string.IsNullOrEmpty(trace))
+                return;
+
             Traces.Add(trace);
 
             if (Traces.Count >= _propertiesMaxCount)
