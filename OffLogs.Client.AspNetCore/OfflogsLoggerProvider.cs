@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using OffLogs.Client.AspNetCore.Sender;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
+using OffLogs.Client.Senders;
 
 namespace OffLogs.Client.AspNetCore
 {

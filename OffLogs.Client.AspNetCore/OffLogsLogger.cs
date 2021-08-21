@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
-using OffLogs.Client.AspNetCore.Sender;
 using System;
+using OffLogs.Client.Senders;
 
 namespace OffLogs.Client.AspNetCore
 {

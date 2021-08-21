@@ -2,8 +2,8 @@
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Configuration;
-using OffLogs.Client.AspNetCore.Sender;
 using System;
+using OffLogs.Client.Senders;
 
 namespace OffLogs.Client.AspNetCore
 {

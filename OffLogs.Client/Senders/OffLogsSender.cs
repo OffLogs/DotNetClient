@@ -1,19 +1,18 @@
-﻿using Microsoft.Extensions.Logging;
-using OffLogs.Client.Dto;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using Microsoft.Extensions.Logging;
+using OffLogs.Client.Dto;
 
-namespace OffLogs.Client.AspNetCore.Sender
+namespace OffLogs.Client.Senders
 {
     public class OffLogsLogSender : IOffLogsLogSender
     {
         private const int BatchSize = 50;
-        private const double SendingInteval = 5000;
+        private const double SendingInterval = 5000;
 
         private readonly IOffLogsHttpClient _httpClient;
         private readonly ConcurrentQueue<LogDto> _queue;
@@ -25,14 +24,14 @@ namespace OffLogs.Client.AspNetCore.Sender
             _httpClient = httpClient;
             _timer = new Timer();
             _timer.Elapsed += SendingTimer_Elapsed;
-            _timer.Interval = SendingInteval;
+            _timer.Interval = SendingInterval;
             _timer.Start();
         }
 
         private void SendingTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             _timer.Stop();
-            SendLogsBanchAsync().Wait();
+            SendLogsBunchAsync().Wait();
             _timer.Start();
         }
 
@@ -46,9 +45,18 @@ namespace OffLogs.Client.AspNetCore.Sender
             _httpClient.SetApiToken(apiToken);
         }
 
-        public Task SendAsync(LogLevel level, string message)
+        public Task SendAsync(
+            LogLevel level, 
+            string message, 
+            IDictionary<string, string> properties = null,
+            DateTime? timestamp = null
+        )
         {
-            var logDto = CreateDto(level, message);
+            var logDto = CreateDto(level, message, timestamp);
+            if (properties != null)
+            {
+                logDto.AddProperties(properties);
+            }
             _queue.Enqueue(logDto);
             return Task.CompletedTask;
         }
@@ -62,18 +70,16 @@ namespace OffLogs.Client.AspNetCore.Sender
                     exception.StackTrace.Split("\n")
                 );
             }
-            if (exception.Data != null)
+
+            foreach (DictionaryEntry keyValuePair in exception.Data)
             {
-                foreach (DictionaryEntry keyValuePair in exception.Data)
-                {
-                    logDto.AddProperty($"{keyValuePair.Key}", $"{keyValuePair.Value}");
-                }
+                logDto.AddProperty($"{keyValuePair.Key}", $"{keyValuePair.Value}");
             }
             _queue.Enqueue(logDto);
             return Task.CompletedTask;
         }
 
-        private async Task SendLogsBanchAsync()
+        private async Task SendLogsBunchAsync()
         {
             var logsToSend = new List<LogDto>();
             while (true)
@@ -83,10 +89,7 @@ namespace OffLogs.Client.AspNetCore.Sender
                 {
                     break;
                 }
-                if (isExists)
-                {
-                    logsToSend.Add(logDto);
-                }
+                logsToSend.Add(logDto);
             }
             try
             {
@@ -101,16 +104,16 @@ namespace OffLogs.Client.AspNetCore.Sender
             // so we continue the process until the list of logs runs out
             if (!_queue.IsEmpty)
             {
-                await SendLogsBanchAsync();
+                await SendLogsBunchAsync();
             }
         }
 
-        private LogDto CreateDto(LogLevel level, string message)
+        private LogDto CreateDto(LogLevel level, string message, DateTime? timstamp = null)
         {
             var dto = new LogDto(
                 level,
                 message,
-                DateTime.Now
+                timstamp ?? DateTime.Now
             );
             return dto;
         }
