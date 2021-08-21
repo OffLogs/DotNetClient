@@ -34,12 +34,12 @@ stages:
             echo "{}" > Offlogs.Client.TestApp.AspNetCore3/appsettings.Local.json
           displayName: 'Create empty config file'
         
-  #      - task: VSBuild@1
-  #        inputs:
-  #          solution: '$(solution)'
-  #          msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
-  #          platform: '$(buildPlatform)'
-  #          configuration: '$(buildConfiguration)'
+        - task: VSBuild@1
+          inputs:
+            solution: '$(solution)'
+            msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+            platform: '$(buildPlatform)'
+            configuration: '$(buildConfiguration)'
         
   #      - task: VSTest@2
   #        inputs:
