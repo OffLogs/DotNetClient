@@ -3,23 +3,21 @@ using OffLogs.Client;
 using Offlogs.Client.Tests.Fakers;
 using Xunit;
 
-namespace Offlogs.Client.Tests.IntegrationTests.Serilog
+namespace Offlogs.Client.Tests.IntegrationTests.Serilog.Unit
 {
     [Collection("Api.Frontend")]
     public class SerilogBaseTest : IClassFixture<AspNetCore3WebApplicationFactory>, IDisposable
     {
         protected readonly AspNetCore3WebApplicationFactory _factory;
-        protected readonly FakeHttpClient _offlogsHttpClient;
 
         public SerilogBaseTest(AspNetCore3WebApplicationFactory factory)
         {
             _factory = factory;
-            _offlogsHttpClient = _factory.Services.GetService(typeof(IOffLogsHttpClient)) as FakeHttpClient;
         }
 
         public void Dispose()
         {
-            _offlogsHttpClient.Dispose();
+            FakeStaticHttpClient.Clear();
             GC.SuppressFinalize(this);
         }
     }

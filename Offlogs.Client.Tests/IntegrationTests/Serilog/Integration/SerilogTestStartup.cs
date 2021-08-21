@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Offlogs.Client.TestApp.AspNetCore3;
 
-namespace Offlogs.Client.Tests.IntegrationTests.Serilog
+namespace Offlogs.Client.Tests.IntegrationTests.Serilog.Integration
 {
     public class AspNetCore3TestStartup: Startup
     {

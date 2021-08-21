@@ -1,13 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Xunit;
 
-namespace Offlogs.Client.Tests.IntegrationTests.Serilog.Tests
+namespace Offlogs.Client.Tests.IntegrationTests.Serilog.Unit.Tests
 {
     public class SerilogSinkTests : SerilogBaseTest
     {
@@ -29,12 +25,12 @@ namespace Offlogs.Client.Tests.IntegrationTests.Serilog.Tests
             // Wait while logs will processed
             Thread.Sleep(6000);
 
-            //Assert.True(_offlogsHttpClient.SentBanches.Count > 0);
-            //foreach (var branch in _offlogsHttpClient.SentBanches)
-            //{
-            //    Assert.Contains(branch, l => l.OriginalLevel == level);
-            //    Assert.Contains(branch, l => l.Message.Contains(messagePart));
-            //}
+            Assert.True(FakeStaticHttpClient.SentLogs.Count > 0);
+            Assert.Contains(FakeStaticHttpClient.SentLogs, l => l.OriginalLevel == level);
+            Assert.Contains(
+                FakeStaticHttpClient.SentLogs, 
+                l => l.Message.Contains($"Some formatted \"{messagePart}\" message")
+            );
         }
     }
 }

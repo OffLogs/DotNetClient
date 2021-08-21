@@ -8,15 +8,14 @@ using Microsoft.Extensions.Hosting;
 using OffLogs.Client;
 using OffLogs.Client.AspNetCore;
 using Offlogs.Client.TestApp.AspNetCore3;
+using Offlogs.Client.Tests.Core;
 using Offlogs.Client.Tests.Extensions;
 using Offlogs.Client.Tests.Fakers;
 using Serilog;
-using Serilog.Sinks.OffLogs;
 using Serilog.Events;
-using Offlogs.Client.Tests.Core;
-using Microsoft.Extensions.Configuration;
+using Serilog.Sinks.OffLogs;
 
-namespace Offlogs.Client.Tests.IntegrationTests.Serilog
+namespace Offlogs.Client.Tests.IntegrationTests.Serilog.Unit
 {
     public class AspNetCore3WebApplicationFactory : WebApplicationFactory<AspNetCore3.AspNetCore3TestStartup>
     {
@@ -41,9 +40,9 @@ namespace Offlogs.Client.Tests.IntegrationTests.Serilog
             var configuration = TestUtils.BuildConfiguration();
 
             using var log = new LoggerConfiguration()
-                .MinimumLevel.Information()
+                .MinimumLevel.Verbose()
                 .WriteTo.Console()
-                .WriteTo.OffLogs(configuration, LogEventLevel.Verbose)
+                .WriteTo.OffLogs(configuration, LogEventLevel.Verbose, new FakeStaticHttpClient())
                 .CreateLogger();
             
             var builder = Host.CreateDefaultBuilder()
@@ -52,18 +51,14 @@ namespace Offlogs.Client.Tests.IntegrationTests.Serilog
                 {
                     builder.UseStartup<Startup>()
                         .UseContentRoot(Directory.GetCurrentDirectory())
-                        .ConfigureLogging(logging =>
-                        {
-                            logging.AddOffLogsLogger();
-                        })
                         .ConfigureTestServices(services =>
                         {
                             
                             // We can further customize our application setup here.
                         })
-                        .ConfigureAppConfiguration(builder =>
+                        .ConfigureAppConfiguration(configurationBuilder =>
                         {
-                            builder.ConfigureConfigurationProvider();
+                            configurationBuilder.ConfigureConfigurationProvider();
                         })
                         .UseTestServer();
                 });

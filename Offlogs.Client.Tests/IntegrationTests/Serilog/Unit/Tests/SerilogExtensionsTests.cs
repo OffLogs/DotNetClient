@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Serilog.Events;
-using Xunit;
 using Serilog.Sinks.OffLogs;
+using Xunit;
 
-namespace Offlogs.Client.Tests.IntegrationTests.Serilog.Tests
+namespace Offlogs.Client.Tests.IntegrationTests.Serilog.Unit.Tests
 {
     public class SerilogExtensionsTests
     {

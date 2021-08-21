@@ -12,7 +12,7 @@ namespace OffLogs.Client.Senders
     public class OffLogsLogSender : IOffLogsLogSender
     {
         private const int BatchSize = 50;
-        private const double SendingInteval = 5000;
+        private const double SendingInterval = 5000;
 
         private readonly IOffLogsHttpClient _httpClient;
         private readonly ConcurrentQueue<LogDto> _queue;
@@ -24,7 +24,7 @@ namespace OffLogs.Client.Senders
             _httpClient = httpClient;
             _timer = new Timer();
             _timer.Elapsed += SendingTimer_Elapsed;
-            _timer.Interval = SendingInteval;
+            _timer.Interval = SendingInterval;
             _timer.Start();
         }
 
@@ -70,12 +70,10 @@ namespace OffLogs.Client.Senders
                     exception.StackTrace.Split("\n")
                 );
             }
-            if (exception.Data != null)
+
+            foreach (DictionaryEntry keyValuePair in exception.Data)
             {
-                foreach (DictionaryEntry keyValuePair in exception.Data)
-                {
-                    logDto.AddProperty($"{keyValuePair.Key}", $"{keyValuePair.Value}");
-                }
+                logDto.AddProperty($"{keyValuePair.Key}", $"{keyValuePair.Value}");
             }
             _queue.Enqueue(logDto);
             return Task.CompletedTask;
@@ -91,10 +89,7 @@ namespace OffLogs.Client.Senders
                 {
                     break;
                 }
-                if (isExists)
-                {
-                    logsToSend.Add(logDto);
-                }
+                logsToSend.Add(logDto);
             }
             try
             {
