@@ -5,6 +5,9 @@
 
 name: 1.3.$(DayOfYear).$(Rev:r)
 
+# no PR triggers
+pr: none
+
 pool:
   vmImage: 'windows-latest'
 
