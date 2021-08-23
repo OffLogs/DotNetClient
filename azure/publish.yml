@@ -3,10 +3,7 @@
 # Add steps that publish symbols, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
-name: 1.244.$(DayOfYear).$(Rev:r)
-
-trigger:
-  - dev
+name: 1.3.$(DayOfYear).$(Rev:r)
 
 pool:
   vmImage: 'windows-latest'
@@ -23,7 +20,7 @@ stages:
     displayName: 'Build Nuget Package'
     jobs:
       - job: CI_Build
-        displayName: 'Nuget - Build, Pack and Test'
+        displayName: 'Nuget - Build, Pack and Push'
         steps:
           - task: NuGetToolInstaller@1
 
@@ -35,7 +32,7 @@ stages:
           - script: |
               echo "{}" > Offlogs.Client.Tests/appsettings.Local.json
               echo "{}" > Offlogs.Client.TestApp.AspNetCore3/appsettings.Local.json
-            displayName: 'Create empty config file'
+            displayName: 'Create empty config files'
 
           - task: VSBuild@1
             displayName: 'Build solution'
