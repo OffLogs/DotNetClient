@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+	<authors>Heorhii Shira</authors>
+	<requireLicenseAcceptance>true</requireLicenseAcceptance>
+	<license type="expression">Apache-2.0</license>
+	<projectUrl>https://offlogs.com</projectUrl>
+	<description>AspNet Core client for sending requests to OffLogs API.</description>
+	<releaseNotes></releaseNotes>
+	<copyright>Copyright (c) OffLogs 2021</copyright>
+	<tags>api logs offlogs dotnet serilog</tags>
+	  <repository type="git" url="https://github.com/OffLogs/DotNetClient/tree/dev/Serilog.Sinks.OffLogs"></repository>
+  </metadata>
+</package>

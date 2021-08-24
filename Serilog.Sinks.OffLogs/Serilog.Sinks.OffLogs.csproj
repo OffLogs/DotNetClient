@@ -13,4 +13,10 @@
       <ProjectReference Include="..\OffLogs.Client\OffLogs.Client.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="Serilog.Sinks.OffLogs.nuspec">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>
