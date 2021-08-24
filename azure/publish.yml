@@ -3,7 +3,7 @@
 # Add steps that publish symbols, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
-name: 1.3.$(DayOfYear).$(Rev:r)
+name: 1.300.$(DayOfYear).$(Rev:r)
 
 # no PR triggers
 pr: none
@@ -46,17 +46,40 @@ stages:
               configuration: '$(buildConfiguration)'
 
           - task: NuGetCommand@2
-            displayName: 'Create nuget packages'
+            displayName: 'Create OffLogs.Client nuget package'
             inputs:
               command: 'pack'
               configuration: $(BuildConfiguration)
-              packagesToPack: '**/OffLogs.Client.csproj;**/OffLogs.Client.AspNetCore.csproj;**/Serilog.Sinks.OffLogs.csproj'
+              basePath: 'OffLogs.Client/'
+              packagesToPack: 'OffLogs.Client/OffLogs.Client.csproj'
               packDestination: '$(Build.ArtifactStagingDirectory)'
               # https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/dotnet-core-cli?view=azure-devops#yaml-snippet
               versioningScheme: byBuildNumber
 
           - task: NuGetCommand@2
-            displayName: 'Pulish packages to NuGet'
+            displayName: 'Create OffLogs.Client.AspNetCore nuget package'
+            inputs:
+              command: 'pack'
+              configuration: $(BuildConfiguration)
+              basePath: 'OffLogs.Client.AspNetCore/'
+              packagesToPack: 'OffLogs.Client.AspNetCore/OffLogs.Client.AspNetCore.csproj'
+              packDestination: '$(Build.ArtifactStagingDirectory)'
+              # https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/dotnet-core-cli?view=azure-devops#yaml-snippet
+              versioningScheme: byBuildNumber
+
+          - task: NuGetCommand@2
+            displayName: 'Create nuget packages'
+            inputs:
+              command: 'pack'
+              configuration: $(BuildConfiguration)
+              basePath: 'Serilog.Sinks.OffLogs/'
+              packagesToPack: 'Serilog.Sinks.OffLogs/Serilog.Sinks.OffLogs.csproj'
+              packDestination: '$(Build.ArtifactStagingDirectory)'
+              # https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/dotnet-core-cli?view=azure-devops#yaml-snippet
+              versioningScheme: byBuildNumber
+          
+          - task: NuGetCommand@2
+            displayName: 'Publish packages to NuGet'
             condition: succeeded()
             inputs:
               command: 'push'
