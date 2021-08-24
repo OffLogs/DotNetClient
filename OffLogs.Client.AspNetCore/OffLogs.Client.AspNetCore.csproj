@@ -18,6 +18,9 @@
 
   <ItemGroup>
     <None Remove="OffLogsWebHostBuilderExtensions.cs~RF150d4198.TMP" />
+    <None Update="OffLogs.Client.AspNetCore.nuspec">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
